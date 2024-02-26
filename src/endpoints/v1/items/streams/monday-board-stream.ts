@@ -33,14 +33,13 @@ export class MondayBoardStream extends Readable {
 	
     const page = this.page;
     const firstPage = this.page === 1;
-    const limit = 100; // This limit must be equal or lower to 100 to not hit a different rate limit bucket
+    const limit = 10000; // This limit must be equal or lower to 100 to not hit a different rate limit bucket
 
     getMondayBoard(this.client, this.boardId, page, limit, firstPage, this.includeSubItems)
       .then(result => {
 	  result.items = result.items_page.items;
 	  delete result.items_page;
-		console.log(typeof result);
-		console.log(result);
+
         this.page++;
         this.hasMore = result.items.length >= limit;
         this.push(result);
